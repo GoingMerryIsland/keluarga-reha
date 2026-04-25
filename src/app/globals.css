@@ -1,26 +1,225 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-sans);
+  --font-heading: var(--font-sans);
   --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* Custom Colors from original theme */
+  --color-cream: var(--cream);
+  --color-warm-white: var(--warm-white);
+  --color-gold: var(--gold-custom);
+  --color-gold-light: var(--gold-light);
+  --color-forest: var(--forest);
+  --color-forest-light: var(--forest-light);
+  --color-forest-pale: var(--forest-pale);
+  --color-danger: var(--danger);
+  --color-danger-pale: var(--danger-pale);
+  --color-ocean: var(--ocean);
+  --color-ocean-pale: var(--ocean-pale);
+  --color-amber: var(--amber-custom);
+  --color-amber-pale: var(--amber-pale-custom);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ============ LIGHT MODE ============ */
+:root {
+  --background: #FAF7F2;
+  --foreground: #1C1C1C;
+  --card: #ffffff;
+  --card-foreground: #1C1C1C;
+  --popover: #ffffff;
+  --popover-foreground: #1C1C1C;
+  --primary: #2D5A3D;
+  --primary-foreground: #ffffff;
+  --secondary: #E8F3EB;
+  --secondary-foreground: #2D5A3D;
+  --muted: #F5F0E8;
+  --muted-foreground: #888888;
+  --accent: #E8F3EB;
+  --accent-foreground: #2D5A3D;
+  --destructive: #C0392B;
+  --border: #E8E0D5;
+  --input: #E8E0D5;
+  --ring: #2D5A3D;
+  --chart-1: #2D5A3D;
+  --chart-2: #C0392B;
+  --chart-3: #1A5276;
+  --chart-4: #B7950B;
+  --chart-5: #C8973A;
+  --radius: 0.75rem;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #555555;
+  --sidebar-primary: #2D5A3D;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #E8F3EB;
+  --sidebar-accent-foreground: #2D5A3D;
+  --sidebar-border: #E8E0D5;
+  --sidebar-ring: #2D5A3D;
+
+  /* Custom theme colors - Light */
+  --cream: #FAF7F2;
+  --warm-white: #FFF8EE;
+  --gold-custom: #C8973A;
+  --gold-light: #E8B96A;
+  --forest: #2D5A3D;
+  --forest-light: #4A8C5C;
+  --forest-pale: #E8F3EB;
+  --danger: #C0392B;
+  --danger-pale: #FDEDEB;
+  --ocean: #1A5276;
+  --ocean-pale: #EAF4FB;
+  --amber-custom: #B7950B;
+  --amber-pale-custom: #FEF9E7;
+}
+
+/* ============ DARK MODE ============ */
+html.dark {
+  --background: #111714;
+  --foreground: #E8E4DF;
+  --card: #1A2420;
+  --card-foreground: #E8E4DF;
+  --popover: #1A2420;
+  --popover-foreground: #E8E4DF;
+  --primary: #5DB67A;
+  --primary-foreground: #0D1A12;
+  --secondary: #1E3328;
+  --secondary-foreground: #A3D4B3;
+  --muted: #1C2923;
+  --muted-foreground: #8A9A90;
+  --accent: #1E3328;
+  --accent-foreground: #A3D4B3;
+  --destructive: #E05B4E;
+  --border: #2A3A32;
+  --input: #2A3A32;
+  --ring: #5DB67A;
+  --chart-1: #5DB67A;
+  --chart-2: #E05B4E;
+  --chart-3: #4A9CC7;
+  --chart-4: #D4B84A;
+  --chart-5: #DAA84A;
+  --sidebar: #141E18;
+  --sidebar-foreground: #8A9A90;
+  --sidebar-primary: #5DB67A;
+  --sidebar-primary-foreground: #0D1A12;
+  --sidebar-accent: #1E3328;
+  --sidebar-accent-foreground: #A3D4B3;
+  --sidebar-border: #2A3A32;
+  --sidebar-ring: #5DB67A;
+
+  /* Custom theme colors - Dark */
+  --cream: #111714;
+  --warm-white: #141E18;
+  --gold-custom: #DAA84A;
+  --gold-light: #E8C06A;
+  --forest: #3A8B56;
+  --forest-light: #5DB67A;
+  --forest-pale: #1E3328;
+  --danger: #E05B4E;
+  --danger-pale: #2E1A18;
+  --ocean: #4A9CC7;
+  --ocean-pale: #152535;
+  --amber-custom: #D4B84A;
+  --amber-pale-custom: #2A2510;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground text-sm leading-relaxed;
+  }
+  html {
+    @apply font-sans;
+  }
+  h1 {
+    @apply font-heading text-2xl font-bold tracking-tight text-foreground md:text-3xl;
+  }
+  h2 {
+    @apply font-heading text-xl font-bold tracking-tight text-foreground;
+  }
+  h3 {
+    @apply font-heading text-lg font-semibold tracking-tight text-foreground;
+  }
+  h4 {
+    @apply font-heading text-base font-semibold text-foreground;
+  }
+  p {
+    @apply text-sm leading-relaxed text-foreground;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Custom scrollbar - Light */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #d1c9bc;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #b5ab9c;
+}
+
+/* Custom scrollbar - Dark */
+.dark ::-webkit-scrollbar-thumb {
+  background: #3A4A42;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #4A5A52;
+}
+
+/* Smooth transitions for interactive elements */
+.transition-smooth {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Theme transition */
+html {
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
