@@ -44,7 +44,7 @@ export function TransactionsPage() {
   const [filterCat, setFilterCat] = useState('');
   const [search, setSearch] = useState('');
   const [confirmOpen, setConfirmOpen] = useState(false);
-  const [txToDelete, setTxToDelete] = useState<string | null>(null);
+  const [txToDelete, setTxToDelete] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
