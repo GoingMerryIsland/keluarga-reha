@@ -24,7 +24,7 @@ export function exportToPDF(rows: ReportRow[], filterLabel: string) {
   // Title
   doc.setFontSize(18);
   doc.setTextColor(45, 90, 61); // forest green
-  doc.text('Laporan Keuangan Keluarga Reha', 14, 18);
+  doc.text('Reha Budget Report', 14, 18);
 
   // Subtitle
   doc.setFontSize(10);
@@ -100,7 +100,7 @@ export function exportToExcel(rows: ReportRow[], filterLabel: string) {
 
   // Title rows
   const wsData: (string | number)[][] = [
-    ['Laporan Keuangan Keluarga Reha'],
+    ['Reha Budget Report'],
     [`Periode: ${filterLabel}`],
     [], // blank row
     headers,

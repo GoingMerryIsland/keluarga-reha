@@ -2,8 +2,8 @@ import type { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Budget Keluarga Reha',
-    short_name: 'Budget Reha',
+    name: 'Reha Budget',
+    short_name: 'Reha Budget',
     description: 'Aplikasi pencatatan keuangan keluarga sederhana',
     start_url: '/',
     display: 'standalone',

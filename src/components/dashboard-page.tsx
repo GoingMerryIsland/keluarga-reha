@@ -65,7 +65,7 @@ export function DashboardPage() {
             {MONTHS[currentMonth]} {currentYear}
           </h2>
           <p className="mt-1 text-sm leading-relaxed text-white opacity-80">
-            Anggaran Keluarga Reha • Periode Aktif
+            Reha Budget • Periode Aktif
           </p>
         </div>
         <div className="sm:text-right">

@@ -15,7 +15,7 @@ export function AppHeader() {
         </div>
         <div>
           <h1 className="text-lg font-bold tracking-wide">
-            Keluarga Reha
+            Reha Budget
           </h1>
           <span className="hidden text-xs font-medium text-muted-foreground sm:block">
             Perencanaan Anggaran

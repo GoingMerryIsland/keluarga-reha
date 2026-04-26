@@ -10,13 +10,13 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Budget Keluarga Reha",
+  title: "Reha Budget",
   description: "Aplikasi pencatatan keuangan keluarga sederhana",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Budget Keluarga Reha",
+    title: "Reha Budget",
   },
   formatDetection: {
     telephone: false,
