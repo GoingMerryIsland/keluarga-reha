@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { RupiahInput } from '@/components/ui/rupiah-input';
 import {
   Select,
   SelectContent,
@@ -20,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { toast } from 'sonner';
 
 interface AddTransactionDialogProps {
   open: boolean;
@@ -38,7 +40,7 @@ export function AddTransactionDialog({
   const [date, setDate] = useState(() => new Date().toISOString().split('T')[0]);
   const [name, setName] = useState('');
   const [cat, setCat] = useState(ALL_CATS[defaultType][0]);
-  const [amount, setAmount] = useState('');
+  const [amount, setAmount] = useState<number | string>('');
   const [note, setNote] = useState('');
 
   const cats = ALL_CATS[type] || [];
@@ -50,8 +52,9 @@ export function AddTransactionDialog({
   };
 
   const handleSave = () => {
-    if (!name.trim() || !amount) {
-      alert('Nama dan jumlah wajib diisi!');
+    const parsedAmount = typeof amount === 'number' ? amount : parseFloat(amount as string);
+    if (!name.trim() || !parsedAmount || parsedAmount <= 0) {
+      toast.error('Nama wajib diisi dan jumlah harus lebih dari Rp 0!');
       return;
     }
 
@@ -60,7 +63,7 @@ export function AddTransactionDialog({
       type,
       name: name.trim(),
       cat,
-      amount: parseFloat(amount) || 0,
+      amount: parsedAmount || 0,
       note: note.trim(),
     });
 
@@ -70,6 +73,7 @@ export function AddTransactionDialog({
     setNote('');
     setDate(new Date().toISOString().split('T')[0]);
     onOpenChange(false);
+    toast.success('Transaksi berhasil ditambahkan!');
   };
 
   // Reset type when dialog opens with a different defaultType
@@ -93,7 +97,7 @@ export function AddTransactionDialog({
 
         <div className="space-y-4">
           <div className="grid gap-4 sm:grid-cols-2">
-            <div className="space-y-1.5">
+            <div className="flex flex-col gap-2">
               <label className="text-sm font-medium text-muted-foreground">
                 Tanggal
               </label>
@@ -103,7 +107,7 @@ export function AddTransactionDialog({
                 onChange={(e) => setDate(e.target.value)}
               />
             </div>
-            <div className="space-y-1.5">
+            <div className="flex flex-col gap-2">
               <label className="text-sm font-medium text-muted-foreground">
                 Tipe
               </label>
@@ -123,7 +127,7 @@ export function AddTransactionDialog({
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <div className="space-y-1.5">
+            <div className="flex flex-col gap-2">
               <label className="text-sm font-medium text-muted-foreground">
                 Nama Transaksi
               </label>
@@ -133,7 +137,7 @@ export function AddTransactionDialog({
                 placeholder="Contoh: Belanja groceries"
               />
             </div>
-            <div className="space-y-1.5">
+            <div className="flex flex-col gap-2">
               <label className="text-sm font-medium text-muted-foreground">
                 Kategori
               </label>
@@ -153,18 +157,17 @@ export function AddTransactionDialog({
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <div className="space-y-1.5">
+            <div className="flex flex-col gap-2">
               <label className="text-sm font-medium text-muted-foreground">
-                Jumlah (Rp)
+                Jumlah
               </label>
-              <Input
-                type="number"
+              <RupiahInput
                 value={amount}
-                onChange={(e) => setAmount(e.target.value)}
+                onValueChange={setAmount}
                 placeholder="0"
               />
             </div>
-            <div className="space-y-1.5">
+            <div className="flex flex-col gap-2">
               <label className="text-sm font-medium text-muted-foreground">
                 Keterangan (opsional)
               </label>

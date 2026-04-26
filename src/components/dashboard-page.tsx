@@ -61,16 +61,16 @@ export function DashboardPage() {
       {/* Period Banner */}
       <div className="flex flex-col gap-3 rounded-xl bg-gradient-to-br from-forest to-forest-light p-5 text-white sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">
+          <h2 className="text-2xl font-bold tracking-tight text-white">
             {MONTHS[currentMonth]} {currentYear}
           </h2>
-          <p className="mt-1 text-sm leading-relaxed opacity-80">
+          <p className="mt-1 text-sm leading-relaxed text-white opacity-80">
             Anggaran Keluarga Reha • Periode Aktif
           </p>
         </div>
         <div className="sm:text-right">
-          <div className="text-xs font-medium opacity-80">Sisa Saldo</div>
-          <div className="text-3xl font-bold tracking-tight">
+          <div className="text-xs font-medium text-white opacity-80">Sisa Saldo</div>
+          <div className="text-3xl font-bold tracking-tight text-white">
             {fmt(summary.sisa)}
           </div>
         </div>

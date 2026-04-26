@@ -24,6 +24,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { AddTransactionDialog } from './add-transaction-dialog';
+import { ConfirmDialog } from './ui/confirm-dialog';
 import { cn } from '@/lib/utils';
 
 const badgeStyles: Record<string, string> = {
@@ -42,6 +43,8 @@ export function TransactionsPage() {
   const [filterType, setFilterType] = useState('');
   const [filterCat, setFilterCat] = useState('');
   const [search, setSearch] = useState('');
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [txToDelete, setTxToDelete] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
@@ -129,25 +132,24 @@ export function TransactionsPage() {
       </Card>
 
       {/* Transaction Table */}
-      <Card>
-        <CardContent className="p-0">
-          {filteredTxs.length > 0 ? (
-            <div className="overflow-x-auto">
+      <div className="pt-2">
+        {filteredTxs.length > 0 ? (
+            <>
               <Table>
-                <TableHeader>
-                  <TableRow className="bg-forest hover:bg-forest">
-                    <TableHead className="text-xs font-medium uppercase tracking-wider text-white">Tanggal</TableHead>
-                    <TableHead className="text-xs font-medium uppercase tracking-wider text-white">Transaksi</TableHead>
-                    <TableHead className="text-xs font-medium uppercase tracking-wider text-white">Tipe</TableHead>
-                    <TableHead className="text-xs font-medium uppercase tracking-wider text-white">Kategori</TableHead>
-                    <TableHead className="text-xs font-medium uppercase tracking-wider text-white">Jumlah</TableHead>
-                    <TableHead className="text-xs font-medium uppercase tracking-wider text-white">Keterangan</TableHead>
-                    <TableHead className="text-xs font-medium uppercase tracking-wider text-white">Aksi</TableHead>
-                  </TableRow>
-                </TableHeader>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-1/4">Tanggal</TableHead>
+                  <TableHead className="w-[30%]">Transaksi</TableHead>
+                  <TableHead>Tipe</TableHead>
+                  <TableHead>Kategori</TableHead>
+                  <TableHead>Jumlah</TableHead>
+                  <TableHead>Keterangan</TableHead>
+                  <TableHead className="text-right">Aksi</TableHead>
+                </TableRow>
+              </TableHeader>
                 <TableBody>
                   {paginatedTxs.map((t) => (
-                    <TableRow key={t.id} className="hover:bg-forest-pale/50">
+                    <TableRow key={t.id}>
                       <TableCell className="text-sm text-foreground">{t.date}</TableCell>
                       <TableCell className="text-sm font-semibold text-foreground">{t.name}</TableCell>
                       <TableCell>
@@ -162,23 +164,22 @@ export function TransactionsPage() {
                       <TableCell className="text-xs text-muted-foreground">
                         {t.note || '-'}
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="text-right">
                         <Button
                           variant="destructive"
                           onClick={() => {
-                            if (confirm('Hapus transaksi ini?')) {
-                              deleteTransaction(t.id);
-                            }
+                            setTxToDelete(t.id);
+                            setConfirmOpen(true);
                           }}
                         >
                           Hapus
                         </Button>
                       </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-              {totalPages > 1 && (
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+            {totalPages > 1 && (
                 <div className="flex items-center justify-between px-4 py-4 border-t">
                   <Button
                     variant="outline"
@@ -201,20 +202,32 @@ export function TransactionsPage() {
                   </Button>
                 </div>
               )}
-            </div>
+            </>
           ) : (
-            <div className="py-12 text-center text-muted-foreground">
+            <div className="py-12 text-center text-muted-foreground rounded-[2rem] border-2 border-dashed">
               <div className="mb-3 text-5xl">📭</div>
               <p className="text-sm text-muted-foreground">Belum ada transaksi. Tambahkan transaksi pertama Anda!</p>
             </div>
           )}
-        </CardContent>
-      </Card>
+      </div>
 
       <AddTransactionDialog
         open={dialogOpen}
         onOpenChange={setDialogOpen}
         defaultType="Pengeluaran"
+      />
+
+      <ConfirmDialog
+        open={confirmOpen}
+        onOpenChange={setConfirmOpen}
+        title="Hapus Transaksi"
+        description="Apakah Anda yakin ingin menghapus transaksi ini? Tindakan ini tidak dapat dibatalkan."
+        onConfirm={() => {
+          if (txToDelete) {
+            deleteTransaction(txToDelete);
+            setTxToDelete(null);
+          }
+        }}
       />
     </div>
   );

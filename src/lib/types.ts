@@ -59,5 +59,6 @@ export type PageName =
   | 'expenses'
   | 'bills'
   | 'debt'
+  | 'active-debts'
   | 'savings'
   | 'report';

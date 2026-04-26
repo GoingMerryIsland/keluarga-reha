@@ -5,7 +5,8 @@ export const MONTHS = [
   'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
 ];
 
-export const YEARS = [2024, 2025, 2026, 2027];
+const currentYear = new Date().getFullYear();
+export const YEARS = Array.from({ length: currentYear - 2024 + 11 }, (_, i) => 2024 + i);
 
 export const INCOME_CATS = [
   'Gaji Suami',
@@ -48,7 +49,8 @@ export const SIDEBAR_ITEMS: { icon: string; label: string; page: string }[] = [
   { icon: '💰', label: 'Pendapatan', page: 'income' },
   { icon: '🛒', label: 'Pengeluaran', page: 'expenses' },
   { icon: '📋', label: 'Tagihan', page: 'bills' },
-  { icon: '💳', label: 'Pembayaran Utang', page: 'debt' },
+  { icon: '💳', label: 'Pembayaran Cicilan', page: 'debt' },
+  { icon: '💸', label: 'Daftar Hutang Aktif', page: 'active-debts' },
   { icon: '🏦', label: 'Tabungan & Investasi', page: 'savings' },
   { icon: '📈', label: 'Laporan', page: 'report' },
 ];

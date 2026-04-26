@@ -6,37 +6,13 @@ import { DEBT_CATS } from '@/lib/constants';
 import type { Debt } from '@/lib/types';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
 import { CategoryList } from './category-list';
 import { AddTransactionDialog } from './add-transaction-dialog';
-import { DebtDialog } from './debt-dialog';
 
 export function DebtPage() {
-  const { getMonthData, data, deleteDebt } = useBudgetStore();
+  const { getMonthData } = useBudgetStore();
   const monthData = getMonthData();
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [debtDialogOpen, setDebtDialogOpen] = useState(false);
-  const [editDebt, setEditDebt] = useState<Debt | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6;
-
-  const debts = data.debts || [];
-  const totalPages = Math.ceil(debts.length / itemsPerPage);
-
-  useEffect(() => {
-    if (currentPage > totalPages && totalPages > 0) {
-      setCurrentPage(totalPages);
-    }
-  }, [totalPages, currentPage]);
-
-  const paginatedDebts = debts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const actualMap: Record<string, number> = {};
   monthData.transactions
@@ -69,90 +45,11 @@ export function DebtPage() {
 
       <Card>
         <CardContent className="p-5">
-          <div className="mb-4 flex items-center justify-between">
-            <h3 className="text-lg font-semibold tracking-tight">Daftar Hutang Aktif</h3>
-            <Button onClick={() => { setEditDebt(null); setDebtDialogOpen(true); }} className="bg-ocean hover:bg-ocean-light">
-              + Tambah Hutang
-            </Button>
-          </div>
-          {debts.length > 0 ? (
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow className="bg-ocean hover:bg-ocean">
-                    <TableHead className="text-xs font-medium uppercase tracking-wider text-white">Nama / Keperluan</TableHead>
-                    <TableHead className="text-xs font-medium uppercase tracking-wider text-white">Kategori</TableHead>
-                    <TableHead className="text-xs font-medium uppercase tracking-wider text-white">Total Hutang</TableHead>
-                    <TableHead className="text-xs font-medium uppercase tracking-wider text-white">Lama Cicilan</TableHead>
-                    <TableHead className="text-xs font-medium uppercase tracking-wider text-white">Aksi</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {paginatedDebts.map((d) => (
-                    <TableRow key={d.id} className="hover:bg-ocean-pale/50">
-                      <TableCell className="text-sm font-semibold text-foreground">{d.name}</TableCell>
-                      <TableCell className="text-sm text-muted-foreground">{d.category}</TableCell>
-                      <TableCell className="text-sm font-bold text-foreground">{fmt(d.amount)}</TableCell>
-                      <TableCell className="text-sm text-foreground">{d.months} Bulan</TableCell>
-                      <TableCell>
-                        <div className="flex gap-2">
-                          <Button variant="outline" size="sm" onClick={() => { setEditDebt(d); setDebtDialogOpen(true); }}>
-                            Edit
-                          </Button>
-                          <Button variant="destructive" size="sm" onClick={() => {
-                            if (confirm('Hapus hutang ini?')) {
-                              deleteDebt(d.id);
-                            }
-                          }}>
-                            Hapus
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-              {totalPages > 1 && (
-                <div className="flex items-center justify-between px-4 py-4 border-t">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                    disabled={currentPage === 1}
-                  >
-                    Sebelumnya
-                  </Button>
-                  <span className="text-sm text-muted-foreground">
-                    Halaman {currentPage} dari {totalPages}
-                  </span>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                    disabled={currentPage === totalPages}
-                  >
-                    Selanjutnya
-                  </Button>
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className="py-8 text-center text-muted-foreground">
-              <div className="mb-3 text-4xl">💸</div>
-              <p className="text-sm">Belum ada daftar hutang yang dicatat.</p>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardContent className="p-5">
           <h3 className="mb-4 text-lg font-semibold tracking-tight">Daftar Cicilan</h3>
           <CategoryList cats={DEBT_CATS} type="debt" budgetMap={monthData.budgets.debt} actualMap={actualMap} />
         </CardContent>
       </Card>
       <AddTransactionDialog open={dialogOpen} onOpenChange={setDialogOpen} defaultType="Utang" />
-      <DebtDialog open={debtDialogOpen} onOpenChange={setDebtDialogOpen} editDebt={editDebt} />
     </div>
   );
 }

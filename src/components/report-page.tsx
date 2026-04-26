@@ -25,6 +25,8 @@ import {
 } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 import { FileText, Sheet, FileSpreadsheet, Trash2, Download } from 'lucide-react';
+import { toast } from 'sonner';
+import { ConfirmDialog } from './ui/confirm-dialog';
 
 export function ReportPage() {
   const { data, getSummary, curKey, deleteMonthData } = useBudgetStore();
@@ -32,6 +34,9 @@ export function ReportPage() {
   // Filters
   const [filterYear, setFilterYear] = useState<string>('all');
   const [filterMonth, setFilterMonth] = useState<string>('all');
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [keyToDelete, setKeyToDelete] = useState<string | null>(null);
+  const [deleteLabel, setDeleteLabel] = useState('');
 
   const allKeys = Object.keys(data.months).sort();
 
@@ -101,26 +106,25 @@ export function ReportPage() {
   }, [filterYear, filterMonth]);
 
   const handleExportPDF = () => {
-    if (reportRows.length === 0) { alert('Tidak ada data untuk di-export.'); return; }
+    if (reportRows.length === 0) { toast.warning('Tidak ada data untuk di-export.'); return; }
     exportToPDF(reportRows, filterLabel);
   };
 
   const handleExportExcel = () => {
-    if (reportRows.length === 0) { alert('Tidak ada data untuk di-export.'); return; }
+    if (reportRows.length === 0) { toast.warning('Tidak ada data untuk di-export.'); return; }
     exportToExcel(reportRows, filterLabel);
   };
 
   const handleExportGSheets = () => {
-    if (reportRows.length === 0) { alert('Tidak ada data untuk di-export.'); return; }
+    if (reportRows.length === 0) { toast.warning('Tidak ada data untuk di-export.'); return; }
     exportToGoogleSheets(reportRows, filterLabel);
   };
 
   const handleDelete = (key: string) => {
     const { m, y } = parseKey(key);
-    const label = `${MONTHS[m]} ${y}`;
-    if (confirm(`Hapus data bulan ${label}?\n\nSemua transaksi dan anggaran bulan ini akan dihapus permanen.`)) {
-      deleteMonthData(key);
-    }
+    setDeleteLabel(`${MONTHS[m]} ${y}`);
+    setKeyToDelete(key);
+    setConfirmOpen(true);
   };
 
   return (
@@ -200,8 +204,8 @@ export function ReportPage() {
       </Card>
 
       {/* Report Table */}
-      <Card>
-        <CardContent className="p-5">
+      <div className="pt-2">
+        <div>
           <h3 className="mb-4 text-lg font-semibold tracking-tight">
             Ringkasan Per Bulan
             {filterLabel !== 'Semua Periode' && (
@@ -210,27 +214,26 @@ export function ReportPage() {
               </span>
             )}
           </h3>
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-forest hover:bg-forest">
-                  <TableHead className="text-xs font-medium uppercase tracking-wider text-white">Bulan</TableHead>
-                  <TableHead className="text-xs font-medium uppercase tracking-wider text-white">Pendapatan</TableHead>
-                  <TableHead className="text-xs font-medium uppercase tracking-wider text-white">Pengeluaran</TableHead>
-                  <TableHead className="text-xs font-medium uppercase tracking-wider text-white">Tagihan</TableHead>
-                  <TableHead className="text-xs font-medium uppercase tracking-wider text-white">Cicilan</TableHead>
-                  <TableHead className="text-xs font-medium uppercase tracking-wider text-white">Tabungan</TableHead>
-                  <TableHead className="text-xs font-medium uppercase tracking-wider text-white">Sisa</TableHead>
-                  <TableHead className="text-xs font-medium uppercase tracking-wider text-white text-center">Aksi</TableHead>
-                </TableRow>
-              </TableHeader>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[15%]">Bulan</TableHead>
+                <TableHead>Pendapatan</TableHead>
+                <TableHead>Pengeluaran</TableHead>
+                <TableHead>Tagihan</TableHead>
+                <TableHead>Cicilan</TableHead>
+                <TableHead>Tabungan</TableHead>
+                <TableHead>Sisa</TableHead>
+                <TableHead className="text-right">Aksi</TableHead>
+              </TableRow>
+            </TableHeader>
               <TableBody>
                 {filteredKeys.length > 0 ? filteredKeys.map((key) => {
                   const { m, y } = parseKey(key);
                   const ms = getSummary(key);
                   const isCurrent = key === curKey();
                   return (
-                    <TableRow key={key} className={cn('hover:bg-forest-pale/50', isCurrent && 'bg-forest-pale/30')}>
+                    <TableRow key={key} className={cn(isCurrent && 'bg-muted/30')}>
                       <TableCell className="text-sm font-semibold text-foreground">
                         {MONTHS[m]} {y}
                         {isCurrent && (
@@ -245,15 +248,17 @@ export function ReportPage() {
                       <TableCell className="text-sm text-foreground">{fmt(ms.actualDebt)}</TableCell>
                       <TableCell className="text-sm text-gold">{fmt(ms.actualSaving)}</TableCell>
                       <TableCell className={cn('text-sm font-bold', ms.sisa >= 0 ? 'text-forest' : 'text-danger')}>{fmt(ms.sisa)}</TableCell>
-                      <TableCell className="text-center">
-                        <Button
-                          variant="ghost"
-                          className="text-muted-foreground hover:bg-danger-pale hover:text-danger"
-                          onClick={() => handleDelete(key)}
-                          aria-label={`Hapus data ${MONTHS[m]} ${y}`}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
+                      <TableCell className="text-right">
+                        <div className="flex justify-end">
+                          <Button
+                            variant="ghost"
+                            className="text-muted-foreground hover:bg-danger-pale hover:text-danger"
+                            onClick={() => handleDelete(key)}
+                            aria-label={`Hapus data ${MONTHS[m]} ${y}`}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </TableCell>
                     </TableRow>
                   );
@@ -272,9 +277,8 @@ export function ReportPage() {
                 )}
               </TableBody>
             </Table>
-          </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Financial Tips */}
       <Card>
@@ -293,6 +297,20 @@ export function ReportPage() {
           )}
         </CardContent>
       </Card>
+
+      <ConfirmDialog
+        open={confirmOpen}
+        onOpenChange={setConfirmOpen}
+        title={`Hapus Data ${deleteLabel}`}
+        description="Apakah Anda yakin ingin menghapus data bulan ini? Semua transaksi dan anggaran bulan ini akan dihapus secara permanen."
+        onConfirm={() => {
+          if (keyToDelete) {
+            deleteMonthData(keyToDelete);
+            setKeyToDelete(null);
+            toast.success(`Data ${deleteLabel} berhasil dihapus`);
+          }
+        }}
+      />
     </div>
   );
 }

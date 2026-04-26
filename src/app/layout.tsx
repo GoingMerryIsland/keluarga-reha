@@ -12,7 +12,26 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "Budget Keluarga Reha",
   description: "Aplikasi pencatatan keuangan keluarga sederhana",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Budget Keluarga Reha",
+  },
+  formatDetection: {
+    telephone: false,
+  },
 };
+
+export const viewport = {
+  themeColor: "#16a34a",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
+
+import { Toaster } from "@/components/ui/sonner";
 
 export default function RootLayout({
   children,
@@ -30,6 +49,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         {children}
+        <Toaster position="bottom-right" richColors />
       </body>
     </html>
   );

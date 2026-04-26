@@ -1,8 +1,30 @@
 'use client';
 
 import { useBudgetStore, fmt } from '@/lib/budget-store';
-import { Input } from '@/components/ui/input';
+import { RupiahInput } from '@/components/ui/rupiah-input';
 import { cn } from '@/lib/utils';
+import { useState, useEffect } from 'react';
+
+function BudgetInput({ initialBudget, onSave }: { initialBudget: number; onSave: (val: number) => void }) {
+  const [val, setVal] = useState<number | string>(initialBudget);
+  
+  useEffect(() => {
+    setVal(initialBudget);
+  }, [initialBudget]);
+
+  return (
+    <RupiahInput
+      value={val}
+      onValueChange={setVal}
+      onBlur={() => {
+        const parsed = typeof val === 'string' ? parseInt(val.replace(/\D/g, ''), 10) : val;
+        onSave(isNaN(parsed) ? 0 : parsed);
+      }}
+      placeholder="0"
+      className="w-full sm:w-40 bg-cream text-right font-semibold focus:bg-card pl-9"
+    />
+  );
+}
 
 interface CategoryListProps {
   cats: string[];
@@ -63,16 +85,11 @@ export function CategoryList({ cats, type, budgetMap, actualMap }: CategoryListP
             {/* Right side - budget input */}
             <div className="flex items-center gap-2 sm:flex-col sm:items-end sm:justify-center sm:gap-1">
               <span className="text-[0.72rem] font-medium uppercase tracking-widest text-muted-foreground">
-                Anggaran (Rp)
+                Anggaran
               </span>
-              <Input
-                type="number"
-                defaultValue={budget}
-                placeholder="0"
-                className="w-full sm:w-40 bg-cream text-right font-semibold focus:bg-card"
-                onBlur={(e) =>
-                  updateBudget(type, cat, parseFloat(e.target.value) || 0)
-                }
+              <BudgetInput
+                initialBudget={budget}
+                onSave={(val) => updateBudget(type, cat, val)}
               />
             </div>
           </div>

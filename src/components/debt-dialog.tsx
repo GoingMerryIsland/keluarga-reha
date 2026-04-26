@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { RupiahInput } from '@/components/ui/rupiah-input';
 import {
   Select,
   SelectContent,
@@ -20,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { toast } from 'sonner';
 
 interface DebtDialogProps {
   open: boolean;
@@ -36,7 +38,7 @@ export function DebtDialog({
   const updateDebt = useBudgetStore((s) => s.updateDebt);
 
   const [name, setName] = useState('');
-  const [amount, setAmount] = useState('');
+  const [amount, setAmount] = useState<number | string>('');
   const [months, setMonths] = useState('');
   const [category, setCategory] = useState(DEBT_CATS[0]);
 
@@ -57,22 +59,25 @@ export function DebtDialog({
   }, [open, editDebt]);
 
   const handleSave = () => {
-    if (!name.trim() || !amount || !months) {
-      alert('Nama, total hutang, dan lama cicilan wajib diisi!');
+    const parsedAmount = typeof amount === 'number' ? amount : parseFloat(amount as string);
+    if (!name.trim() || !parsedAmount || parsedAmount <= 0 || !months) {
+      toast.error('Nama, total hutang (harus > 0), dan lama cicilan wajib diisi!');
       return;
     }
 
     const payload = {
       name: name.trim(),
-      amount: parseFloat(amount) || 0,
+      amount: parsedAmount || 0,
       months: parseInt(months, 10) || 1,
       category,
     };
 
     if (editDebt) {
       updateDebt(editDebt.id, payload);
+      toast.success('Hutang berhasil diperbarui!');
     } else {
       addDebt(payload);
+      toast.success('Hutang berhasil ditambahkan!');
     }
 
     onOpenChange(false);
@@ -88,7 +93,7 @@ export function DebtDialog({
         </DialogHeader>
 
         <div className="space-y-4 py-4">
-          <div className="space-y-1.5">
+          <div className="flex flex-col gap-2">
             <label className="text-sm font-medium text-muted-foreground">
               Nama / Keperluan Hutang
             </label>
@@ -100,18 +105,17 @@ export function DebtDialog({
           </div>
           
           <div className="grid gap-4 sm:grid-cols-2">
-            <div className="space-y-1.5">
+            <div className="flex flex-col gap-2">
               <label className="text-sm font-medium text-muted-foreground">
-                Total Hutang (Rp)
+                Total Hutang
               </label>
-              <Input
-                type="number"
+              <RupiahInput
                 value={amount}
-                onChange={(e) => setAmount(e.target.value)}
+                onValueChange={setAmount}
                 placeholder="0"
               />
             </div>
-            <div className="space-y-1.5">
+            <div className="flex flex-col gap-2">
               <label className="text-sm font-medium text-muted-foreground">
                 Lama Cicilan (Bulan)
               </label>
@@ -124,7 +128,7 @@ export function DebtDialog({
             </div>
           </div>
 
-          <div className="space-y-1.5">
+          <div className="flex flex-col gap-2">
             <label className="text-sm font-medium text-muted-foreground">
               Kategori
             </label>
