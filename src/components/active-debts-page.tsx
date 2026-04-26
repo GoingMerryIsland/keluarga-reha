@@ -20,7 +20,7 @@ export function ActiveDebtsPage() {
   const [debtDialogOpen, setDebtDialogOpen] = useState(false);
   const [editDebt, setEditDebt] = useState<Debt | null>(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
-  const [debtToDelete, setDebtToDelete] = useState<string | null>(null);
+  const [debtToDelete, setDebtToDelete] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
