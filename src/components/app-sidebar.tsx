@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { ChevronDown, Search, Sun, Moon } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 
 export function AppSidebar() {
   const {
@@ -26,6 +27,7 @@ export function AppSidebar() {
 
   const [monthDropdownOpen, setMonthDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [confirmResetOpen, setConfirmResetOpen] = useState(false);
 
   const summary = getSummary();
 
@@ -177,9 +179,16 @@ export function AppSidebar() {
           ))}
         </div>
 
-        {/* Theme Toggle at Bottom */}
+        {/* Reset Data & Theme Toggle at Bottom */}
         <div className="mt-auto px-4 pb-4">
           <Separator className="mb-4" />
+          <button
+            onClick={() => setConfirmResetOpen(true)}
+            className="mb-3 flex w-full items-center justify-between rounded-xl border border-danger/20 bg-danger-pale px-4 py-3 text-danger transition-all hover:bg-danger/20"
+          >
+            <span className="text-sm font-semibold">⚠️ Kosongkan Data</span>
+          </button>
+          
           <button
             onClick={toggleTheme}
             className="flex w-full items-center justify-between rounded-xl border border-border bg-muted/50 px-4 py-3 transition-all hover:bg-muted"
@@ -218,6 +227,16 @@ export function AppSidebar() {
             </div>
           </button>
         </div>
+
+        <ConfirmDialog
+          open={confirmResetOpen}
+          onOpenChange={setConfirmResetOpen}
+          title="Kosongkan Semua Data"
+          description="Apakah Anda yakin ingin mengosongkan semua data dan anggaran? Tindakan ini tidak dapat dibatalkan."
+          onConfirm={() => {
+            useBudgetStore.getState().resetData();
+          }}
+        />
       </aside>
     </>
   );

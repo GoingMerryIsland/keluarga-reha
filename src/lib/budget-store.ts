@@ -76,6 +76,7 @@ interface BudgetStore {
   deleteDebt: (id: number) => void;
   toggleSidebar: () => void;
   closeSidebar: () => void;
+  resetData: () => void;
 }
 
 export const useBudgetStore = create<BudgetStore>()(
@@ -193,6 +194,15 @@ export const useBudgetStore = create<BudgetStore>()(
 
       toggleSidebar: () => set((s) => ({ sidebarOpen: !s.sidebarOpen })),
       closeSidebar: () => set({ sidebarOpen: false }),
+      resetData: () => {
+        set({
+          data: { months: {}, debts: [] },
+          currentMonth: new Date().getMonth(),
+          currentYear: new Date().getFullYear(),
+        });
+        localStorage.removeItem('budgetKC');
+        window.location.reload();
+      },
     }),
     {
       name: 'budgetKC',
