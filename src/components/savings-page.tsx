@@ -23,9 +23,9 @@ export function SavingsPage() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="text-xl font-bold tracking-tight">🏦 Tabungan &amp; Investasi</h2>
-        <Button onClick={() => setDialogOpen(true)} className="bg-forest hover:bg-forest-light">+ Tambah Dana</Button>
+        <Button onClick={() => setDialogOpen(true)} className="w-full sm:w-auto bg-forest hover:bg-forest-light">+ Tambah Dana</Button>
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <Card className="border-l-4 border-l-gold">

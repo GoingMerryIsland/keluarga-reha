@@ -205,11 +205,11 @@ export function DashboardPage() {
       {/* Top Categories */}
       <Card>
         <CardContent className="p-5">
-          <div className="mb-4 flex items-center gap-2">
+          <div className="mb-4 flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2">
             <h3 className="text-lg font-semibold tracking-tight">
               🏆 Top Kategori Pengeluaran
             </h3>
-            <span className="rounded-full bg-forest-pale px-2.5 py-0.5 text-xs font-medium text-forest">
+            <span className="w-fit rounded-full bg-forest-pale px-2.5 py-0.5 text-xs font-medium text-forest">
               Bulan Ini
             </span>
           </div>
@@ -221,10 +221,10 @@ export function DashboardPage() {
                   key={cat}
                   className="flex items-center justify-between border-b border-border py-3 last:border-b-0"
                 >
-                  <div className="flex-1">
+                  <div className="flex-1 min-w-0 mr-3">
                     <div className="mb-1 text-sm font-semibold text-foreground">{cat}</div>
                     <div className="flex items-center gap-2">
-                      <div className="h-[5px] w-[40%] overflow-hidden rounded-full bg-border">
+                      <div className="h-[5px] flex-1 overflow-hidden rounded-full bg-border">
                         <div
                           className="h-full rounded-full bg-forest transition-all duration-500"
                           style={{
@@ -232,12 +232,12 @@ export function DashboardPage() {
                           }}
                         />
                       </div>
-                      <span className="text-xs font-semibold text-muted-foreground">
+                      <span className="text-xs font-semibold text-muted-foreground shrink-0">
                         {Math.round((amt / maxVal) * 100)}%
                       </span>
                     </div>
                   </div>
-                  <div className="text-right text-sm font-bold text-foreground">
+                  <div className="text-right text-sm font-bold text-foreground shrink-0">
                     {fmt(amt)}
                   </div>
                 </div>

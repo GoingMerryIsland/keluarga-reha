@@ -58,35 +58,32 @@ export function CategoryList({ cats, type, budgetMap, actualMap }: CategoryListP
         return (
           <div
             key={cat}
-            className="grid grid-cols-1 gap-2 border-b border-border py-4 last:border-b-0 sm:grid-cols-[1fr_auto] sm:gap-6"
+            className="border-b border-border py-4 last:border-b-0"
           >
-            {/* Left side */}
-            <div className="flex flex-col gap-1.5">
-              <div className="text-sm font-semibold text-foreground">{cat}</div>
-              <div className="flex items-center gap-2.5">
-                <div className="h-[5px] w-[30%] overflow-hidden rounded-full bg-border">
-                  <div
-                    className={cn('h-full rounded-full transition-all duration-500', barCls)}
-                    style={{ width: `${p}%` }}
-                  />
-                </div>
-                <span className={cn('text-xs font-semibold', pctColor)}>
-                  {p}%
-                </span>
+            {/* Category name */}
+            <div className="mb-2 text-sm font-semibold text-foreground">{cat}</div>
+
+            {/* Progress bar */}
+            <div className="mb-2 flex items-center gap-2.5">
+              <div className="h-[5px] flex-1 overflow-hidden rounded-full bg-border">
+                <div
+                  className={cn('h-full rounded-full transition-all duration-500', barCls)}
+                  style={{ width: `${p}%` }}
+                />
               </div>
-              <div className="flex gap-3">
+              <span className={cn('text-xs font-semibold shrink-0', pctColor)}>
+                {p}%
+              </span>
+            </div>
+
+            {/* Amount + Budget row */}
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-baseline gap-2">
                 <span className="text-sm font-bold text-foreground">{fmt(actual)}</span>
                 <span className="text-xs text-muted-foreground">
                   dari {fmt(budget)}
                 </span>
               </div>
-            </div>
-
-            {/* Right side - budget input */}
-            <div className="flex items-center gap-2 sm:flex-col sm:items-end sm:justify-center sm:gap-1">
-              <span className="text-[0.72rem] font-medium uppercase tracking-widest text-muted-foreground">
-                Anggaran
-              </span>
               <BudgetInput
                 initialBudget={budget}
                 onSave={(val) => updateBudget(type, cat, val)}

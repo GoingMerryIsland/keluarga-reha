@@ -23,13 +23,13 @@ export function IncomePage() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="flex items-center gap-2 text-xl font-bold tracking-tight">
           💰 Pendapatan
         </h2>
         <Button
           onClick={() => setDialogOpen(true)}
-          className="bg-forest hover:bg-forest-light"
+          className="w-full sm:w-auto bg-forest hover:bg-forest-light"
         >
           + Tambah Sumber
         </Button>

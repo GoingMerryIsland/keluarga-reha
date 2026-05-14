@@ -79,13 +79,13 @@ export function TransactionsPage() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="flex items-center gap-2 text-xl font-bold tracking-tight">
           📝 Daftar Transaksi
         </h2>
         <Button
           onClick={() => setDialogOpen(true)}
-          className="bg-forest hover:bg-forest-light"
+          className="w-full sm:w-auto bg-forest hover:bg-forest-light"
         >
           + Tambah Transaksi
         </Button>
@@ -93,9 +93,9 @@ export function TransactionsPage() {
 
       {/* Filters */}
       <Card>
-        <CardContent className="flex flex-wrap items-center gap-3 p-4">
+        <CardContent className="grid gap-3 p-4 sm:grid-cols-3">
           <Select value={filterType} onValueChange={(v) => setFilterType(v ?? '')}>
-            <SelectTrigger className="w-40">
+            <SelectTrigger className="w-full">
               <SelectValue placeholder="Semua Tipe" />
             </SelectTrigger>
             <SelectContent>
@@ -109,7 +109,7 @@ export function TransactionsPage() {
           </Select>
 
           <Select value={filterCat} onValueChange={(v) => setFilterCat(v ?? '')}>
-            <SelectTrigger className="w-44">
+            <SelectTrigger className="w-full">
               <SelectValue placeholder="Semua Kategori" />
             </SelectTrigger>
             <SelectContent>
@@ -126,7 +126,7 @@ export function TransactionsPage() {
             placeholder="🔍 Cari..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-48"
+            className="w-full"
           />
         </CardContent>
       </Card>

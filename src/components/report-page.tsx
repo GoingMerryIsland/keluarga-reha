@@ -133,47 +133,47 @@ export function ReportPage() {
 
       {/* Filter & Export Bar */}
       <Card>
-        <CardContent className="p-4">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            {/* Filters */}
-            <div className="flex flex-wrap items-center gap-3">
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-medium uppercase tracking-widest text-muted-foreground">Tahun</span>
-                <Select value={filterYear} onValueChange={(v) => setFilterYear(v ?? 'all')}>
-                  <SelectTrigger className="w-32">
-                    <SelectValue placeholder="Semua Tahun" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">Semua Tahun</SelectItem>
-                    {YEARS.map((y) => (
-                      <SelectItem key={y} value={String(y)}>{y}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-medium uppercase tracking-widest text-muted-foreground">Bulan</span>
-                <Select value={filterMonth} onValueChange={(v) => setFilterMonth(v ?? 'all')}>
-                  <SelectTrigger className="w-40">
-                    <SelectValue placeholder="Semua Bulan" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">Semua Bulan</SelectItem>
-                    {MONTHS.map((name, i) => (
-                      <SelectItem key={i} value={String(i)}>{name}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+        <CardContent className="p-4 space-y-4">
+          {/* Filters */}
+          <div className="grid grid-cols-2 gap-3">
+            <div className="flex flex-col gap-1.5">
+              <span className="text-xs font-medium uppercase tracking-widest text-muted-foreground">Tahun</span>
+              <Select value={filterYear} onValueChange={(v) => setFilterYear(v ?? 'all')}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Semua Tahun" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Semua Tahun</SelectItem>
+                  {YEARS.map((y) => (
+                    <SelectItem key={y} value={String(y)}>{y}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
-            {/* Export Buttons */}
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="mr-1 flex items-center gap-1.5 text-xs font-medium uppercase tracking-widest text-muted-foreground">
-                <Download className="h-3.5 w-3.5" />
-                Export
-              </span>
+            <div className="flex flex-col gap-1.5">
+              <span className="text-xs font-medium uppercase tracking-widest text-muted-foreground">Bulan</span>
+              <Select value={filterMonth} onValueChange={(v) => setFilterMonth(v ?? 'all')}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Semua Bulan" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Semua Bulan</SelectItem>
+                  {MONTHS.map((name, i) => (
+                    <SelectItem key={i} value={String(i)}>{name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          {/* Export Buttons */}
+          <div className="border-t border-border pt-3">
+            <span className="mb-2 flex items-center gap-1.5 text-xs font-medium uppercase tracking-widest text-muted-foreground">
+              <Download className="h-3.5 w-3.5" />
+              Export
+            </span>
+            <div className="grid grid-cols-3 gap-2 mt-2">
               <Button
                 variant="outline"
                 onClick={handleExportPDF}
@@ -193,10 +193,10 @@ export function ReportPage() {
               <Button
                 variant="outline"
                 onClick={handleExportGSheets}
-                className="gap-1.5 border-ocean/30 text-ocean hover:bg-ocean-pale hover:text-ocean"
+                className="gap-1.5 border-ocean/30 text-ocean hover:bg-ocean-pale hover:text-ocean text-xs sm:text-sm"
               >
-                <Sheet className="h-4 w-4" />
-                Google Sheets
+                <Sheet className="h-4 w-4 shrink-0" />
+                <span className="truncate">Sheets</span>
               </Button>
             </div>
           </div>

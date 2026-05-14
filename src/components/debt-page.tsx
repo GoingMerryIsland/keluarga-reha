@@ -24,9 +24,9 @@ export function DebtPage() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="text-xl font-bold tracking-tight">💳 Pembayaran Utang & Cicilan</h2>
-        <Button onClick={() => setDialogOpen(true)} className="bg-forest hover:bg-forest-light">+ Tambah Cicilan</Button>
+        <Button onClick={() => setDialogOpen(true)} className="w-full sm:w-auto bg-forest hover:bg-forest-light">+ Tambah Cicilan</Button>
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <Card>

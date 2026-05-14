@@ -23,11 +23,11 @@ export function ExpensesPage() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="flex items-center gap-2 text-xl font-bold tracking-tight">
           🛒 Pengeluaran
         </h2>
-        <Button onClick={() => setDialogOpen(true)} className="bg-forest hover:bg-forest-light">
+        <Button onClick={() => setDialogOpen(true)} className="w-full sm:w-auto bg-forest hover:bg-forest-light">
           + Tambah Transaksi
         </Button>
       </div>

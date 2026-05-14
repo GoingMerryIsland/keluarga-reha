@@ -43,9 +43,9 @@ export function ActiveDebtsPage() {
 
       <div className="pt-2">
         <div>
-          <div className="mb-4 flex items-center justify-between">
+          <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <h3 className="text-lg font-semibold tracking-tight">Semua Hutang</h3>
-            <Button onClick={() => { setEditDebt(null); setDebtDialogOpen(true); }} className="bg-ocean hover:bg-ocean-light">
+            <Button onClick={() => { setEditDebt(null); setDebtDialogOpen(true); }} className="w-full sm:w-auto bg-ocean hover:bg-ocean-light">
               + Tambah Hutang
             </Button>
           </div>
