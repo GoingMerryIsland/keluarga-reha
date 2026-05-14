@@ -131,55 +131,106 @@ export function TransactionsPage() {
         </CardContent>
       </Card>
 
-      {/* Transaction Table */}
+      {/* Transaction List */}
       <div className="pt-2">
         {filteredTxs.length > 0 ? (
             <>
-              <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-1/4">Tanggal</TableHead>
-                  <TableHead className="w-[30%]">Transaksi</TableHead>
-                  <TableHead>Tipe</TableHead>
-                  <TableHead>Kategori</TableHead>
-                  <TableHead>Jumlah</TableHead>
-                  <TableHead>Keterangan</TableHead>
-                  <TableHead className="text-right">Aksi</TableHead>
-                </TableRow>
-              </TableHeader>
-                <TableBody>
-                  {paginatedTxs.map((t) => (
-                    <TableRow key={t.id}>
-                      <TableCell className="text-sm text-foreground">{t.date}</TableCell>
-                      <TableCell className="text-sm font-semibold text-foreground">{t.name}</TableCell>
-                      <TableCell>
-                        <Badge className={cn('text-xs', badgeStyles[t.type])}>
-                          {t.type}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-sm text-foreground">{t.cat}</TableCell>
-                      <TableCell className="text-sm font-bold text-foreground">
-                        {t.type === 'Pendapatan' ? '+' : '-'} {fmt(t.amount)}
-                      </TableCell>
-                      <TableCell className="text-xs text-muted-foreground">
-                        {t.note || '-'}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <Button
-                          variant="destructive"
-                          onClick={() => {
-                            setTxToDelete(t.id);
-                            setConfirmOpen(true);
-                          }}
-                        >
-                          Hapus
-                        </Button>
-                      </TableCell>
-                  </TableRow>
+              {/* Mobile Card View */}
+              <div className="flex flex-col gap-3 md:hidden">
+                {paginatedTxs.map((t) => (
+                  <div key={t.id} className="rounded-2xl bg-card p-4 shadow-sm ring-1 ring-foreground/10">
+                    <div className="mb-2 flex items-center justify-between border-b border-border pb-2">
+                      <span className="text-sm font-semibold text-foreground">{t.name}</span>
+                      <Badge className={cn('text-xs', badgeStyles[t.type])}>{t.type}</Badge>
+                    </div>
+                    <div className="mb-3 space-y-1.5">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-muted-foreground">Tanggal</span>
+                        <span className="text-sm text-foreground">{t.date}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-muted-foreground">Kategori</span>
+                        <span className="text-sm text-foreground">{t.cat}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-muted-foreground">Jumlah</span>
+                        <span className={cn('text-sm font-bold', t.type === 'Pendapatan' ? 'text-forest' : 'text-danger')}>
+                          {t.type === 'Pendapatan' ? '+' : '-'} {fmt(t.amount)}
+                        </span>
+                      </div>
+                      {t.note && (
+                        <div className="flex items-start justify-between">
+                          <span className="text-xs text-muted-foreground">Catatan</span>
+                          <span className="text-right text-xs text-muted-foreground max-w-[60%]">{t.note}</span>
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex justify-end border-t border-border pt-2">
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => {
+                          setTxToDelete(t.id);
+                          setConfirmOpen(true);
+                        }}
+                      >
+                        Hapus
+                      </Button>
+                    </div>
+                  </div>
                 ))}
-              </TableBody>
-            </Table>
-            {totalPages > 1 && (
+              </div>
+
+              {/* Desktop Table View */}
+              <div className="hidden md:block">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="w-1/4">Tanggal</TableHead>
+                      <TableHead className="w-[30%]">Transaksi</TableHead>
+                      <TableHead>Tipe</TableHead>
+                      <TableHead>Kategori</TableHead>
+                      <TableHead>Jumlah</TableHead>
+                      <TableHead>Keterangan</TableHead>
+                      <TableHead className="text-right">Aksi</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {paginatedTxs.map((t) => (
+                      <TableRow key={t.id}>
+                        <TableCell className="text-sm text-foreground">{t.date}</TableCell>
+                        <TableCell className="text-sm font-semibold text-foreground">{t.name}</TableCell>
+                        <TableCell>
+                          <Badge className={cn('text-xs', badgeStyles[t.type])}>
+                            {t.type}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-sm text-foreground">{t.cat}</TableCell>
+                        <TableCell className="text-sm font-bold text-foreground">
+                          {t.type === 'Pendapatan' ? '+' : '-'} {fmt(t.amount)}
+                        </TableCell>
+                        <TableCell className="text-xs text-muted-foreground">
+                          {t.note || '-'}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <Button
+                            variant="destructive"
+                            onClick={() => {
+                              setTxToDelete(t.id);
+                              setConfirmOpen(true);
+                            }}
+                          >
+                            Hapus
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+
+              {/* Pagination */}
+              {totalPages > 1 && (
                 <div className="flex items-center justify-between px-4 py-4 border-t">
                   <Button
                     variant="outline"

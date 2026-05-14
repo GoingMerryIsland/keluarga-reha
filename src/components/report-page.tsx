@@ -203,7 +203,7 @@ export function ReportPage() {
         </CardContent>
       </Card>
 
-      {/* Report Table */}
+      {/* Report Data */}
       <div className="pt-2">
         <div>
           <h3 className="mb-4 text-lg font-semibold tracking-tight">
@@ -214,19 +214,91 @@ export function ReportPage() {
               </span>
             )}
           </h3>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[15%]">Bulan</TableHead>
-                <TableHead>Pendapatan</TableHead>
-                <TableHead>Pengeluaran</TableHead>
-                <TableHead>Tagihan</TableHead>
-                <TableHead>Cicilan</TableHead>
-                <TableHead>Tabungan</TableHead>
-                <TableHead>Sisa</TableHead>
-                <TableHead className="text-right">Aksi</TableHead>
-              </TableRow>
-            </TableHeader>
+
+          {/* Mobile Card View */}
+          <div className="flex flex-col gap-3 md:hidden">
+            {filteredKeys.length > 0 ? filteredKeys.map((key) => {
+              const { m, y } = parseKey(key);
+              const ms = getSummary(key);
+              const isCurrent = key === curKey();
+              return (
+                <div key={key} className={cn('rounded-2xl bg-card p-4 shadow-sm ring-1 ring-foreground/10', isCurrent && 'ring-2 ring-forest/30')}>
+                  <div className="mb-3 flex items-center justify-between border-b border-border pb-3">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-semibold text-foreground">{MONTHS[m]} {y}</span>
+                      {isCurrent && (
+                        <span className="rounded bg-forest/10 px-1.5 py-0.5 text-[0.65rem] font-medium text-forest">
+                          Aktif
+                        </span>
+                      )}
+                    </div>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      className="gap-1.5"
+                      onClick={() => handleDelete(key)}
+                      aria-label={`Hapus data ${MONTHS[m]} ${y}`}
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                      Hapus
+                    </Button>
+                  </div>
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-muted-foreground">Pendapatan</span>
+                      <span className="text-sm font-semibold text-forest">{fmt(ms.actualIncome)}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-muted-foreground">Pengeluaran</span>
+                      <span className="text-sm font-semibold text-danger">{fmt(ms.actualExpense)}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-muted-foreground">Tagihan</span>
+                      <span className="text-sm text-foreground">{fmt(ms.actualBill)}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-muted-foreground">Cicilan</span>
+                      <span className="text-sm text-foreground">{fmt(ms.actualDebt)}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-muted-foreground">Tabungan</span>
+                      <span className="text-sm text-gold">{fmt(ms.actualSaving)}</span>
+                    </div>
+                    <div className="flex items-center justify-between border-t border-border pt-1.5">
+                      <span className="text-xs font-medium text-muted-foreground">Sisa</span>
+                      <span className={cn('text-sm font-bold', ms.sisa >= 0 ? 'text-forest' : 'text-danger')}>{fmt(ms.sisa)}</span>
+                    </div>
+                  </div>
+                </div>
+              );
+            }) : (
+              <div className="rounded-2xl bg-card p-8 text-center shadow-sm ring-1 ring-foreground/10">
+                <div className="mb-2 text-4xl">📊</div>
+                <p className="text-sm text-muted-foreground">
+                  {allKeys.length === 0
+                    ? 'Belum ada data. Tambahkan transaksi terlebih dahulu.'
+                    : 'Tidak ada data untuk filter yang dipilih.'
+                  }
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* Desktop Table View */}
+          <div className="hidden md:block">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[15%]">Bulan</TableHead>
+                  <TableHead>Pendapatan</TableHead>
+                  <TableHead>Pengeluaran</TableHead>
+                  <TableHead>Tagihan</TableHead>
+                  <TableHead>Cicilan</TableHead>
+                  <TableHead>Tabungan</TableHead>
+                  <TableHead>Sisa</TableHead>
+                  <TableHead className="text-right">Aksi</TableHead>
+                </TableRow>
+              </TableHeader>
               <TableBody>
                 {filteredKeys.length > 0 ? filteredKeys.map((key) => {
                   const { m, y } = parseKey(key);
@@ -277,6 +349,7 @@ export function ReportPage() {
                 )}
               </TableBody>
             </Table>
+          </div>
         </div>
       </div>
 

@@ -51,40 +51,79 @@ export function ActiveDebtsPage() {
           </div>
           {debts.length > 0 ? (
             <>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-[30%]">Nama / Keperluan</TableHead>
-                    <TableHead>Kategori</TableHead>
-                    <TableHead>Total Hutang</TableHead>
-                    <TableHead>Lama Cicilan</TableHead>
-                    <TableHead className="text-right">Aksi</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {paginatedDebts.map((d) => (
-                    <TableRow key={d.id}>
-                      <TableCell className="text-sm font-semibold text-foreground">{d.name}</TableCell>
-                      <TableCell className="text-sm text-muted-foreground">{d.category}</TableCell>
-                      <TableCell className="text-sm font-bold text-foreground">{fmt(d.amount)}</TableCell>
-                      <TableCell className="text-sm text-foreground">{d.months} Bulan</TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex gap-2 justify-end">
-                          <Button variant="outline" size="sm" onClick={() => { setEditDebt(d); setDebtDialogOpen(true); }}>
-                            Edit
-                          </Button>
-                          <Button variant="destructive" size="sm" onClick={() => {
-                            setDebtToDelete(d.id);
-                            setConfirmOpen(true);
-                          }}>
-                            Hapus
-                          </Button>
-                        </div>
-                      </TableCell>
+              {/* Mobile Card View */}
+              <div className="flex flex-col gap-3 md:hidden">
+                {paginatedDebts.map((d) => (
+                  <div key={d.id} className="rounded-2xl bg-card p-4 shadow-sm ring-1 ring-foreground/10">
+                    <div className="mb-3 space-y-1.5">
+                      <div className="text-sm font-semibold text-foreground border-b border-border pb-2">{d.name}</div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-muted-foreground">Kategori</span>
+                        <span className="text-sm text-foreground">{d.category}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-muted-foreground">Total Hutang</span>
+                        <span className="text-sm font-bold text-foreground">{fmt(d.amount)}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-muted-foreground">Lama Cicilan</span>
+                        <span className="text-sm text-foreground">{d.months} Bulan</span>
+                      </div>
+                    </div>
+                    <div className="flex justify-end gap-2 border-t border-border pt-2">
+                      <Button variant="outline" size="sm" onClick={() => { setEditDebt(d); setDebtDialogOpen(true); }}>
+                        Edit
+                      </Button>
+                      <Button variant="destructive" size="sm" onClick={() => {
+                        setDebtToDelete(d.id);
+                        setConfirmOpen(true);
+                      }}>
+                        Hapus
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Desktop Table View */}
+              <div className="hidden md:block">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="w-[30%]">Nama / Keperluan</TableHead>
+                      <TableHead>Kategori</TableHead>
+                      <TableHead>Total Hutang</TableHead>
+                      <TableHead>Lama Cicilan</TableHead>
+                      <TableHead className="text-right">Aksi</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                  </TableHeader>
+                  <TableBody>
+                    {paginatedDebts.map((d) => (
+                      <TableRow key={d.id}>
+                        <TableCell className="text-sm font-semibold text-foreground">{d.name}</TableCell>
+                        <TableCell className="text-sm text-muted-foreground">{d.category}</TableCell>
+                        <TableCell className="text-sm font-bold text-foreground">{fmt(d.amount)}</TableCell>
+                        <TableCell className="text-sm text-foreground">{d.months} Bulan</TableCell>
+                        <TableCell className="text-right">
+                          <div className="flex gap-2 justify-end">
+                            <Button variant="outline" size="sm" onClick={() => { setEditDebt(d); setDebtDialogOpen(true); }}>
+                              Edit
+                            </Button>
+                            <Button variant="destructive" size="sm" onClick={() => {
+                              setDebtToDelete(d.id);
+                              setConfirmOpen(true);
+                            }}>
+                              Hapus
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+
+              {/* Pagination */}
               {totalPages > 1 && (
                 <div className="flex items-center justify-between px-4 py-4 border-t">
                   <Button
