@@ -77,17 +77,21 @@ export function CategoryList({ cats, type, budgetMap, actualMap }: CategoryListP
             </div>
 
             {/* Amount + Budget row */}
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex items-baseline gap-2">
-                <span className="text-sm font-bold text-foreground">{fmt(actual)}</span>
-                <span className="text-xs text-muted-foreground">
+            <div className="flex items-center justify-between gap-4 mt-1">
+              <div className="flex flex-col gap-1.5">
+                <span className="whitespace-nowrap text-sm font-bold text-foreground">
+                  {fmt(actual)}
+                </span>
+                <span className="whitespace-nowrap text-xs text-muted-foreground">
                   dari {fmt(budget)}
                 </span>
               </div>
-              <BudgetInput
-                initialBudget={budget}
-                onSave={(val) => updateBudget(type, cat, val)}
-              />
+              <div className="w-full max-w-[140px] sm:max-w-[160px]">
+                <BudgetInput
+                  initialBudget={budget}
+                  onSave={(val) => updateBudget(type, cat, val)}
+                />
+              </div>
             </div>
           </div>
         );
