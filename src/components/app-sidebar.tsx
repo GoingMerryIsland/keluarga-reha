@@ -232,57 +232,6 @@ export function AppSidebar() {
         <div className="mt-auto px-4 pb-4">
           <Separator className="mb-4" />
 
-          {/* PWA Install Button */}
-          {canInstall && (
-            <button
-              onClick={async () => {
-                const success = await install();
-                if (success) {
-                  toast.success('Aplikasi berhasil diinstal! 🎉');
-                }
-              }}
-              className="mb-3 flex w-full items-center gap-3 rounded-xl border border-foreground/10 bg-foreground px-4 py-3 text-background transition-all hover:bg-foreground/85 active:scale-[0.98]"
-            >
-              <Download className="h-4 w-4" />
-              <span className="text-sm font-semibold">📲 Download Aplikasi</span>
-            </button>
-          )}
-
-          {isIOS && (
-            <>
-              <button
-                onClick={() => setShowIOSGuide(!showIOSGuide)}
-                className="mb-3 flex w-full items-center gap-3 rounded-xl border border-foreground/10 bg-foreground px-4 py-3 text-background transition-all hover:bg-foreground/85 active:scale-[0.98]"
-              >
-                <Download className="h-4 w-4" />
-                <span className="text-sm font-semibold">📲 Download Aplikasi</span>
-              </button>
-              {showIOSGuide && (
-                <div className="mb-3 rounded-xl border border-forest/20 bg-forest-pale p-3 text-xs text-forest space-y-2">
-                  <p className="font-semibold">Cara install di iPhone/iPad:</p>
-                  <div className="flex items-start gap-2">
-                    <span className="font-bold">1.</span>
-                    <p>Ketuk tombol <Share className="inline h-3.5 w-3.5" /> <strong>Share</strong> di bawah Safari</p>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <span className="font-bold">2.</span>
-                    <p>Pilih <strong>&quot;Add to Home Screen&quot;</strong></p>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <span className="font-bold">3.</span>
-                    <p>Ketuk <strong>&quot;Add&quot;</strong> untuk install</p>
-                  </div>
-                </div>
-              )}
-            </>
-          )}
-
-          {isInstalled && (
-            <div className="mb-3 flex w-full items-center gap-3 rounded-xl border border-forest/20 bg-forest-pale px-4 py-3 text-forest">
-              <span className="text-sm font-semibold">✅ Terinstal</span>
-            </div>
-          )}
-
           <button
             onClick={() => setConfirmResetOpen(true)}
             className="mb-3 flex w-full items-center justify-between rounded-xl border border-danger/20 bg-danger-pale px-4 py-3 text-danger transition-all hover:bg-danger/20"
@@ -292,7 +241,7 @@ export function AppSidebar() {
           
           <button
             onClick={toggleTheme}
-            className="flex w-full items-center justify-between rounded-xl border border-border bg-muted/50 px-4 py-3 transition-all hover:bg-muted"
+            className="mb-3 flex w-full items-center justify-between rounded-xl border border-border bg-muted/50 px-4 py-3 transition-all hover:bg-muted"
             aria-label="Toggle dark mode"
           >
             <div className="flex items-center gap-3">
@@ -327,6 +276,57 @@ export function AppSidebar() {
               </div>
             </div>
           </button>
+
+          {/* PWA Install Button */}
+          {canInstall && (
+            <button
+              onClick={async () => {
+                const success = await install();
+                if (success) {
+                  toast.success('Aplikasi berhasil diinstal! 🎉');
+                }
+              }}
+              className="flex w-full items-center gap-3 rounded-xl border border-foreground/10 bg-foreground px-4 py-3 text-background transition-all hover:bg-foreground/85 active:scale-[0.98]"
+            >
+              <Download className="h-4 w-4" />
+              <span className="text-sm font-semibold">📲 Download Aplikasi</span>
+            </button>
+          )}
+
+          {isIOS && (
+            <>
+              <button
+                onClick={() => setShowIOSGuide(!showIOSGuide)}
+                className="flex w-full items-center gap-3 rounded-xl border border-foreground/10 bg-foreground px-4 py-3 text-background transition-all hover:bg-foreground/85 active:scale-[0.98]"
+              >
+                <Download className="h-4 w-4" />
+                <span className="text-sm font-semibold">📲 Download Aplikasi</span>
+              </button>
+              {showIOSGuide && (
+                <div className="mt-3 rounded-xl border border-forest/20 bg-forest-pale p-3 text-xs text-forest space-y-2">
+                  <p className="font-semibold">Cara install di iPhone/iPad:</p>
+                  <div className="flex items-start gap-2">
+                    <span className="font-bold">1.</span>
+                    <p>Ketuk tombol <Share className="inline h-3.5 w-3.5" /> <strong>Share</strong> di bawah Safari</p>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="font-bold">2.</span>
+                    <p>Pilih <strong>&quot;Add to Home Screen&quot;</strong></p>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="font-bold">3.</span>
+                    <p>Ketuk <strong>&quot;Add&quot;</strong> untuk install</p>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+
+          {isInstalled && (
+            <div className="flex w-full items-center gap-3 rounded-xl border border-forest/20 bg-forest-pale px-4 py-3 text-forest">
+              <span className="text-sm font-semibold">✅ Terinstal</span>
+            </div>
+          )}
         </div>
 
         <ConfirmDialog

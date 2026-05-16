@@ -18,13 +18,16 @@ export const metadata: Metadata = {
     statusBarStyle: "default",
     title: "Reha Budget",
   },
+  icons: [
+    { rel: "apple-touch-icon", url: "/apple-touch-icon.png", sizes: "180x180" },
+  ],
   formatDetection: {
     telephone: false,
   },
 };
 
 export const viewport = {
-  themeColor: "#16a34a",
+  themeColor: "#1b2a4a",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
