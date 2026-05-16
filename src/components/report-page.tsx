@@ -133,13 +133,13 @@ export function ReportPage() {
 
       {/* Filter & Export Bar */}
       <Card>
-        <CardContent className="p-4 space-y-4">
+        <CardContent className="p-4 space-y-4 md:space-y-0 md:flex md:items-end md:gap-4">
           {/* Filters */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-3 md:flex md:gap-3 md:shrink-0">
             <div className="flex flex-col gap-1.5">
               <span className="text-xs font-medium uppercase tracking-widest text-muted-foreground">Tahun</span>
               <Select value={filterYear} onValueChange={(v) => setFilterYear(v ?? 'all')}>
-                <SelectTrigger className="w-full">
+                <SelectTrigger className="w-full md:w-[140px]">
                   <SelectValue placeholder="Semua Tahun" />
                 </SelectTrigger>
                 <SelectContent>
@@ -154,7 +154,7 @@ export function ReportPage() {
             <div className="flex flex-col gap-1.5">
               <span className="text-xs font-medium uppercase tracking-widest text-muted-foreground">Bulan</span>
               <Select value={filterMonth} onValueChange={(v) => setFilterMonth(v ?? 'all')}>
-                <SelectTrigger className="w-full">
+                <SelectTrigger className="w-full md:w-[160px]">
                   <SelectValue placeholder="Semua Bulan" />
                 </SelectTrigger>
                 <SelectContent>
@@ -168,16 +168,16 @@ export function ReportPage() {
           </div>
 
           {/* Export Buttons */}
-          <div className="border-t border-border pt-3">
-            <span className="mb-2 flex items-center gap-1.5 text-xs font-medium uppercase tracking-widest text-muted-foreground">
+          <div className="border-t border-border pt-3 md:border-t-0 md:border-l md:border-border md:pt-0 md:pl-4 md:ml-auto">
+            <span className="mb-2 flex items-center gap-1.5 text-xs font-medium uppercase tracking-widest text-muted-foreground md:hidden">
               <Download className="h-3.5 w-3.5" />
               Export
             </span>
-            <div className="grid grid-cols-3 gap-2 mt-2">
+            <div className="grid grid-cols-3 gap-2 mt-2 md:mt-0 md:flex md:gap-2">
               <Button
                 variant="outline"
                 onClick={handleExportPDF}
-                className="gap-1.5 border-danger/30 text-danger hover:bg-danger-pale hover:text-danger"
+                className="gap-1.5 border-danger/30 text-danger hover:bg-danger-pale hover:text-danger md:px-3"
               >
                 <FileText className="h-4 w-4" />
                 PDF
@@ -185,7 +185,7 @@ export function ReportPage() {
               <Button
                 variant="outline"
                 onClick={handleExportExcel}
-                className="gap-1.5 border-forest/30 text-forest hover:bg-forest-pale hover:text-forest"
+                className="gap-1.5 border-forest/30 text-forest hover:bg-forest-pale hover:text-forest md:px-3"
               >
                 <FileSpreadsheet className="h-4 w-4" />
                 Excel
@@ -193,7 +193,7 @@ export function ReportPage() {
               <Button
                 variant="outline"
                 onClick={handleExportGSheets}
-                className="gap-1.5 border-ocean/30 text-ocean hover:bg-ocean-pale hover:text-ocean text-xs sm:text-sm"
+                className="gap-1.5 border-ocean/30 text-ocean hover:bg-ocean-pale hover:text-ocean text-xs sm:text-sm md:px-3"
               >
                 <Sheet className="h-4 w-4 shrink-0" />
                 <span className="truncate">Sheets</span>

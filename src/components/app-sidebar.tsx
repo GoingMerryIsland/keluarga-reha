@@ -3,7 +3,7 @@
 import { useState, useMemo, useRef, useEffect } from 'react';
 import { useBudgetStore, fmt } from '@/lib/budget-store';
 import { useThemeStore } from '@/lib/theme-store';
-import { MONTHS, YEARS, SIDEBAR_ITEMS } from '@/lib/constants';
+import { MONTHS, YEARS, SIDEBAR_GROUPS } from '@/lib/constants';
 import type { PageName } from '@/lib/types';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
@@ -85,6 +85,18 @@ export function AppSidebar() {
   };
 
   const isDark = theme === 'dark';
+
+  // Lock body scroll when sidebar is open on mobile
+  useEffect(() => {
+    if (sidebarOpen && window.matchMedia('(max-width: 767px)').matches) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [sidebarOpen]);
 
   return (
     <>
@@ -209,22 +221,26 @@ export function AppSidebar() {
 
         {/* Navigation */}
         <div className="mb-6 flex-1">
-          <div className="mb-2 px-5 text-[0.65rem] font-medium uppercase tracking-widest text-muted-foreground">
-            Menu Utama
-          </div>
-          {SIDEBAR_ITEMS.map((item) => (
-            <button
-              key={item.page}
-              className={cn(
-                'flex w-full items-center gap-3 px-5 py-2.5 text-sm text-muted-foreground transition-all hover:bg-forest-pale hover:text-forest',
-                activePage === item.page &&
-                  'border-r-[3px] border-forest bg-forest-pale font-semibold text-forest'
-              )}
-              onClick={() => setPage(item.page as PageName)}
-            >
-              <span className="w-5 text-center text-base">{item.icon}</span>
-              <span>{item.label}</span>
-            </button>
+          {SIDEBAR_GROUPS.map((group, gi) => (
+            <div key={group.group} className={cn(gi > 0 && 'mt-4')}>
+              <div className="mb-1.5 px-5 text-[0.65rem] font-medium uppercase tracking-widest text-muted-foreground">
+                {group.group}
+              </div>
+              {group.items.map((item) => (
+                <button
+                  key={item.page}
+                  className={cn(
+                    'flex w-full items-center gap-3 px-5 py-2.5 text-sm text-muted-foreground transition-all hover:bg-forest-pale hover:text-forest',
+                    activePage === item.page &&
+                      'border-r-[3px] border-forest bg-forest-pale font-semibold text-forest'
+                  )}
+                  onClick={() => setPage(item.page as PageName)}
+                >
+                  <span className="w-5 text-center text-base">{item.icon}</span>
+                  <span>{item.label}</span>
+                </button>
+              ))}
+            </div>
           ))}
         </div>
 

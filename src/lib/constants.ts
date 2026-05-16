@@ -43,16 +43,36 @@ export const ALL_CATS: Record<TransactionType, string[]> = {
   Tabungan: SAVING_CATS,
 };
 
-export const SIDEBAR_ITEMS: { icon: string; label: string; page: string }[] = [
-  { icon: '📊', label: 'Dashboard', page: 'dashboard' },
-  { icon: '📝', label: 'Transaksi', page: 'transactions' },
-  { icon: '💰', label: 'Pendapatan', page: 'income' },
-  { icon: '🛒', label: 'Pengeluaran', page: 'expenses' },
-  { icon: '📋', label: 'Tagihan', page: 'bills' },
-  { icon: '💳', label: 'Pembayaran Cicilan', page: 'debt' },
-  { icon: '💸', label: 'Daftar Hutang Aktif', page: 'active-debts' },
-  { icon: '🏦', label: 'Tabungan & Investasi', page: 'savings' },
-  { icon: '📈', label: 'Laporan', page: 'report' },
+export const SIDEBAR_GROUPS: { group: string; items: { icon: string; label: string; page: string }[] }[] = [
+  {
+    group: 'Utama',
+    items: [
+      { icon: '📊', label: 'Dashboard', page: 'dashboard' },
+      { icon: '📝', label: 'Transaksi', page: 'transactions' },
+    ],
+  },
+  {
+    group: 'Keuangan',
+    items: [
+      { icon: '💰', label: 'Pendapatan', page: 'income' },
+      { icon: '🛒', label: 'Pengeluaran', page: 'expenses' },
+      { icon: '📋', label: 'Tagihan', page: 'bills' },
+    ],
+  },
+  {
+    group: 'Hutang & Tabungan',
+    items: [
+      { icon: '💳', label: 'Pembayaran Cicilan', page: 'debt' },
+      { icon: '💸', label: 'Daftar Hutang Aktif', page: 'active-debts' },
+      { icon: '🏦', label: 'Tabungan & Investasi', page: 'savings' },
+    ],
+  },
+  {
+    group: 'Analisis',
+    items: [
+      { icon: '📈', label: 'Laporan', page: 'report' },
+    ],
+  },
 ];
 
 export const DEFAULT_BUDGETS = {
