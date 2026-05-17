@@ -152,16 +152,17 @@ export function exportToExcel(rows: ReportRow[], filterLabel: string) {
   XLSX.writeFile(wb, `Laporan-Keuangan-${filterLabel.replace(/\s+/g, '-')}.xlsx`);
 }
 
-// ─── Google Sheets Export (copy to clipboard + open Sheets) ───────
-export async function exportToGoogleSheets(rows: ReportRow[], filterLabel: string): Promise<boolean> {
+// ─── Google Sheets Export (CSV download — opens natively in Sheets on mobile) ─
+export function exportToGoogleSheets(rows: ReportRow[], filterLabel: string) {
   const headers = ['Bulan', 'Pendapatan', 'Pengeluaran', 'Tagihan', 'Cicilan', 'Tabungan', 'Sisa'];
 
-  // Build tab-separated values (TSV) — Google Sheets pastes TSV perfectly into cells
-  const tsvRows: string[] = [];
-  tsvRows.push(headers.join('\t'));
+  const csvRows: string[] = [];
+  csvRows.push(headers.join(','));
 
   rows.forEach((r) => {
-    tsvRows.push([r.label, r.income, r.expense, r.bill, r.debt, r.saving, r.balance].join('\t'));
+    // Quote the label in case it contains commas
+    const label = r.label.includes(',') ? `"${r.label}"` : r.label;
+    csvRows.push([label, r.income, r.expense, r.bill, r.debt, r.saving, r.balance].join(','));
   });
 
   // Totals
@@ -176,29 +177,19 @@ export async function exportToGoogleSheets(rows: ReportRow[], filterLabel: strin
     }),
     { income: 0, expense: 0, bill: 0, debt: 0, saving: 0, balance: 0 }
   );
-  tsvRows.push(['TOTAL', totals.income, totals.expense, totals.bill, totals.debt, totals.saving, totals.balance].join('\t'));
+  csvRows.push(['TOTAL', totals.income, totals.expense, totals.bill, totals.debt, totals.saving, totals.balance].join(','));
 
-  const tsvContent = tsvRows.join('\n');
+  // UTF-8 BOM for proper encoding + CRLF for compatibility
+  const BOM = '\uFEFF';
+  const csvContent = BOM + csvRows.join('\r\n');
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
 
-  // Copy to clipboard
-  try {
-    await navigator.clipboard.writeText(tsvContent);
-  } catch {
-    // Fallback for older browsers
-    const ta = document.createElement('textarea');
-    ta.value = tsvContent;
-    ta.style.position = 'fixed';
-    ta.style.left = '-9999px';
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    document.body.removeChild(ta);
-  }
-
-  // Open Google Sheets in new tab
-  setTimeout(() => {
-    window.open('https://sheets.google.com/create', '_blank');
-  }, 300);
-
-  return true;
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `Laporan-Keuangan-${filterLabel.replace(/\s+/g, '-')}.csv`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
 }
