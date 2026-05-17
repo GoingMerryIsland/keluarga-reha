@@ -115,9 +115,10 @@ export function ReportPage() {
     exportToExcel(reportRows, filterLabel);
   };
 
-  const handleExportGSheets = () => {
+  const handleExportGSheets = async () => {
     if (reportRows.length === 0) { toast.warning('Tidak ada data untuk di-export.'); return; }
-    exportToGoogleSheets(reportRows, filterLabel);
+    await exportToGoogleSheets(reportRows, filterLabel);
+    toast.success('Data sudah di-copy! Paste (Ctrl+V) di Google Sheets yang terbuka.', { duration: 6000 });
   };
 
   const handleDelete = (key: string) => {

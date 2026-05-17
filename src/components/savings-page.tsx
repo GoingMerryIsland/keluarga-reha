@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useBudgetStore, fmt } from '@/lib/budget-store';
 import { SAVING_CATS } from '@/lib/constants';
 import { Card, CardContent } from '@/components/ui/card';
@@ -12,6 +12,15 @@ export function SavingsPage() {
   const { getMonthData } = useBudgetStore();
   const monthData = getMonthData();
   const [dialogOpen, setDialogOpen] = useState(false);
+
+  // Auto-open add dialog when navigated via FAB
+  useEffect(() => {
+    const pending = useBudgetStore.getState().pendingAddAction;
+    if (pending) {
+      setDialogOpen(true);
+      useBudgetStore.getState().clearPendingAdd();
+    }
+  }, []);
 
   const actualMap: Record<string, number> = {};
   monthData.transactions

@@ -6,6 +6,7 @@ import { useBudgetStore } from '@/lib/budget-store';
 import { useThemeInit } from '@/lib/theme-store';
 import { AppHeader } from '@/components/app-header';
 import { AppSidebar } from '@/components/app-sidebar';
+import { MobileBottomNav } from '@/components/mobile-bottom-nav';
 import { DashboardPage } from '@/components/dashboard-page';
 import { TransactionsPage } from '@/components/transactions-page';
 import { IncomePage } from '@/components/income-page';
@@ -46,12 +47,13 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background">
       <AppHeader />
-      <div className="pt-16 md:pl-[260px]">
+      <div className="pt-14 md:pt-16 md:pl-[260px]">
         <AppSidebar />
-        <main className="min-h-[calc(100vh-4rem)] p-4 md:p-6">
+        <main className="min-h-[calc(100vh-3.5rem)] p-4 pb-24 md:min-h-[calc(100vh-4rem)] md:p-6 md:pb-6">
           <ActivePage />
         </main>
       </div>
+      <MobileBottomNav />
     </div>
   );
 }

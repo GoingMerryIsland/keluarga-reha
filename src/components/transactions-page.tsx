@@ -40,6 +40,15 @@ export function TransactionsPage() {
   const monthData = getMonthData();
 
   const [dialogOpen, setDialogOpen] = useState(false);
+
+  // Auto-open add dialog when navigated via FAB
+  useEffect(() => {
+    const pending = useBudgetStore.getState().pendingAddAction;
+    if (pending) {
+      setDialogOpen(true);
+      useBudgetStore.getState().clearPendingAdd();
+    }
+  }, []);
   const [filterType, setFilterType] = useState('');
   const [filterCat, setFilterCat] = useState('');
   const [search, setSearch] = useState('');

@@ -86,33 +86,12 @@ export function AppSidebar() {
 
   const isDark = theme === 'dark';
 
-  // Lock body scroll when sidebar is open on mobile
-  useEffect(() => {
-    if (sidebarOpen && window.matchMedia('(max-width: 767px)').matches) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [sidebarOpen]);
+
 
   return (
     <>
-      {/* Mobile overlay */}
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 top-16 z-40 bg-black/35 md:hidden"
-          onClick={closeSidebar}
-        />
-      )}
-
       <aside
-        className={cn(
-          'fixed bottom-0 left-0 top-16 z-40 flex w-[260px] flex-col overflow-y-auto border-r border-border bg-card shadow-xl transition-transform duration-300 md:translate-x-0 md:shadow-none',
-          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        )}
+        className="fixed bottom-0 left-0 top-16 z-40 hidden w-[260px] flex-col overflow-y-auto border-r border-border bg-card md:flex"
       >
         {/* Month Picker */}
         <div className="relative mx-4 mt-4 mb-2">

@@ -14,6 +14,15 @@ export function DebtPage() {
   const monthData = getMonthData();
   const [dialogOpen, setDialogOpen] = useState(false);
 
+  // Auto-open add dialog when navigated via FAB
+  useEffect(() => {
+    const pending = useBudgetStore.getState().pendingAddAction;
+    if (pending) {
+      setDialogOpen(true);
+      useBudgetStore.getState().clearPendingAdd();
+    }
+  }, []);
+
   const actualMap: Record<string, number> = {};
   monthData.transactions
     .filter((t) => t.type === 'Utang')

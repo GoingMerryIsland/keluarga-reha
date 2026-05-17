@@ -55,6 +55,7 @@ interface BudgetStore {
   currentMonth: number;
   currentYear: number;
   activePage: PageName;
+  pendingAddAction: boolean;
   data: AppState;
   sidebarOpen: boolean;
 
@@ -66,6 +67,8 @@ interface BudgetStore {
 
   // Actions
   setPage: (page: PageName) => void;
+  setPageWithAdd: (page: PageName) => void;
+  clearPendingAdd: () => void;
   switchMonth: (m: number, y: number) => void;
   addTransaction: (tx: Omit<Transaction, 'id'>) => void;
   deleteTransaction: (id: number) => void;
@@ -85,6 +88,7 @@ export const useBudgetStore = create<BudgetStore>()(
       currentMonth: new Date().getMonth(),
       currentYear: new Date().getFullYear(),
       activePage: 'dashboard' as PageName,
+      pendingAddAction: false,
       sidebarOpen: false,
       data: { months: {}, debts: [] },
 
@@ -104,7 +108,9 @@ export const useBudgetStore = create<BudgetStore>()(
         return `${MONTHS[get().currentMonth]} ${get().currentYear}`;
       },
 
-      setPage: (page) => set({ activePage: page, sidebarOpen: false }),
+      setPage: (page) => set({ activePage: page, sidebarOpen: false, pendingAddAction: false }),
+      setPageWithAdd: (page) => set({ activePage: page, sidebarOpen: false, pendingAddAction: true }),
+      clearPendingAdd: () => set({ pendingAddAction: false }),
 
       switchMonth: (m, y) => {
         const key = monthKey(m, y);

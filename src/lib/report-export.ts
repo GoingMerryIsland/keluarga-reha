@@ -152,15 +152,16 @@ export function exportToExcel(rows: ReportRow[], filterLabel: string) {
   XLSX.writeFile(wb, `Laporan-Keuangan-${filterLabel.replace(/\s+/g, '-')}.xlsx`);
 }
 
-// ─── CSV / Google Sheets Export ───────────────────────────────────
-export function exportToGoogleSheets(rows: ReportRow[], filterLabel: string) {
+// ─── Google Sheets Export (copy to clipboard + open Sheets) ───────
+export async function exportToGoogleSheets(rows: ReportRow[], filterLabel: string): Promise<boolean> {
   const headers = ['Bulan', 'Pendapatan', 'Pengeluaran', 'Tagihan', 'Cicilan', 'Tabungan', 'Sisa'];
 
-  const csvRows: string[] = [];
-  csvRows.push(headers.join(','));
+  // Build tab-separated values (TSV) — Google Sheets pastes TSV perfectly into cells
+  const tsvRows: string[] = [];
+  tsvRows.push(headers.join('\t'));
 
   rows.forEach((r) => {
-    csvRows.push([r.label, r.income, r.expense, r.bill, r.debt, r.saving, r.balance].join(','));
+    tsvRows.push([r.label, r.income, r.expense, r.bill, r.debt, r.saving, r.balance].join('\t'));
   });
 
   // Totals
@@ -175,21 +176,29 @@ export function exportToGoogleSheets(rows: ReportRow[], filterLabel: string) {
     }),
     { income: 0, expense: 0, bill: 0, debt: 0, saving: 0, balance: 0 }
   );
-  csvRows.push(['TOTAL', totals.income, totals.expense, totals.bill, totals.debt, totals.saving, totals.balance].join(','));
+  tsvRows.push(['TOTAL', totals.income, totals.expense, totals.bill, totals.debt, totals.saving, totals.balance].join('\t'));
 
-  const csvContent = csvRows.join('\n');
-  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
+  const tsvContent = tsvRows.join('\n');
 
-  // Download CSV
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = `Laporan-Keuangan-${filterLabel.replace(/\s+/g, '-')}.csv`;
-  link.click();
-  URL.revokeObjectURL(url);
+  // Copy to clipboard
+  try {
+    await navigator.clipboard.writeText(tsvContent);
+  } catch {
+    // Fallback for older browsers
+    const ta = document.createElement('textarea');
+    ta.value = tsvContent;
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+  }
 
   // Open Google Sheets in new tab
   setTimeout(() => {
     window.open('https://sheets.google.com/create', '_blank');
-  }, 500);
+  }, 300);
+
+  return true;
 }

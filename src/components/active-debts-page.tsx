@@ -24,6 +24,16 @@ export function ActiveDebtsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
+  // Auto-open add dialog when navigated via FAB
+  useEffect(() => {
+    const pending = useBudgetStore.getState().pendingAddAction;
+    if (pending) {
+      setEditDebt(null);
+      setDebtDialogOpen(true);
+      useBudgetStore.getState().clearPendingAdd();
+    }
+  }, []);
+
   const debts = data.debts || [];
   const totalPages = Math.ceil(debts.length / itemsPerPage);
 
